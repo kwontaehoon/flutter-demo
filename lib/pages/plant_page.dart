@@ -10,10 +10,24 @@ class PlantPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: SafeArea(
-        child: Column(children: [TopPortion(), SearchPortion(), CategoryTab()]),
+        child: Column(
+          children: [
+            TopPortion(),
+            SearchPortion(),
+            CategoryTab(),
+            GridPortion(),
+          ],
+        ),
       ),
     );
   }
+}
+
+class CategoryTab extends StatefulWidget {
+  const CategoryTab({super.key});
+
+  @override
+  State<CategoryTab> createState() => _CategoryTabState();
 }
 
 class TopPortion extends StatelessWidget {
@@ -101,13 +115,6 @@ class SearchPortion extends StatelessWidget {
   }
 }
 
-class CategoryTab extends StatefulWidget {
-  const CategoryTab({super.key});
-
-  @override
-  State<CategoryTab> createState() => _CategoryTabState();
-}
-
 class _CategoryTabState extends State<CategoryTab> {
   int selectedIndex = 0;
   final List<String> categories = [
@@ -119,50 +126,144 @@ class _CategoryTabState extends State<CategoryTab> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 30, right: 30, top: 35),
-      child: SingleChildScrollView(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: categories.map((category) {
-            int index = categories.indexOf(category);
-            return GestureDetector(
-              onTap: () {
-                setState(() {
-                  selectedIndex = index;
-                });
-              },
-              child: Column(
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 30, right: 30, top: 35),
+          child: SingleChildScrollView(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: categories.map((category) {
+                int index = categories.indexOf(category);
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedIndex = index;
+                    });
+                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        category,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: selectedIndex == index
+                              ? AppColors.primaryGreen
+                              : AppColors.textBlack,
+                        ),
+                      ),
+                      AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        margin: const EdgeInsets.only(top: 5),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: selectedIndex == index ? 26 : 0,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(11),
+                          color: selectedIndex == index
+                              ? AppColors.primaryGreen
+                              : Colors.transparent,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+        ),
+        const SizedBox(height: 10),
+      ],
+    );
+  }
+}
+
+class GridPortion extends StatelessWidget {
+  const GridPortion({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.only(left: 30, right: 30, top: 1),
+        child: GridView.builder(
+          itemCount: 8,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            mainAxisSpacing: 12,
+            crossAxisSpacing: 15,
+            childAspectRatio: 0.7,
+          ),
+          itemBuilder: (context, index) {
+            return const PlantItemCard();
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class PlantItemCard extends StatelessWidget {
+  static List<String> plant = List.generate(8, (index) => "Service $index");
+  const PlantItemCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoButton(
+      padding: EdgeInsets.zero,
+      onPressed: null,
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColors.backgroundGray,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.only(left: 15, right: 15, bottom: 15),
+          child: Stack(
+            children: [
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Expanded(child: Image.asset("assets/images/plant_image.jpg")),
                   Text(
-                    category,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: selectedIndex == index
-                          ? AppColors.primaryGreen
-                          : AppColors.textBlack,
-                    ),
+                    "11",
+                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
                   ),
-                  AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    margin: const EdgeInsets.only(top: 5),
-                    padding: EdgeInsets.symmetric(
-                      horizontal: selectedIndex == index ? 26 : 0,
-                      vertical: 2,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(11),
-                      color: selectedIndex == index
-                          ? AppColors.primaryGreen
-                          : Colors.transparent,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "123",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14,
+                        ),
+                      ),
+                      Container(
+                        width: 24,
+                        height: 24,
+                        decoration: const BoxDecoration(
+                          color: AppColors.primaryGreen,
+                        ),
+                        child: const Icon(Icons.add, color: Colors.white),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            );
-          }).toList(),
+              Positioned(
+                top: 10,
+                left: 10,
+                child: CircleAvatar(
+                  backgroundColor: AppColors.backgroundGray,
+                  child: Icon(Icons.favorite, color: Colors.black),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

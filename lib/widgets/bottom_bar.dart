@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/pages/home_page.dart';
-import 'package:flutter_application_1/pages/profile_page.dart';
-import 'package:flutter_application_1/pages/search_page.dart';
-import 'package:flutter_application_1/pages/wishlist_page.dart';
+import 'package:flutter_application_1/pages/bottom_bar/home_page.dart';
+import 'package:flutter_application_1/pages/bottom_bar/profile_page.dart';
+import 'package:flutter_application_1/pages/bottom_bar/search_page.dart';
+import 'package:flutter_application_1/pages/bottom_bar/wishlist_page.dart';
 
 class BottomBar extends StatefulWidget {
   const BottomBar({super.key});
